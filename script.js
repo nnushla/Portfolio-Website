@@ -103,10 +103,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
   if (twEl) {
     var phrases = [
-      'Aspiring Product Manager',
       'Data Analyst',
       'Problem Solver',
-      'Aspiring Product Manager & Analyst'
+      'Developer'
     ];
     var phraseIdx = 0;
     var charIdx = 0;

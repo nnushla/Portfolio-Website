@@ -477,20 +477,35 @@ document.addEventListener('DOMContentLoaded', function () {
     if (e.key === 'Escape') closeModal();
   });
 
-  // Wire up all "View case study" buttons and project cards
-  document.querySelectorAll('.pcard-btn[data-id]').forEach(function(btn) {
+  // Wire up all "View case study" / "Visit live site" buttons and project cards.
+  // Cards with a matching entry in PROJECTS open the full case study modal.
+  // Cards with only a data-href (no PROJECTS entry) go straight to the live site —
+  // used for quick add-ons like Tools & Extensions that don't need a full write-up.
+  document.querySelectorAll('.pcard-btn[data-id], .pcard-btn[data-href]').forEach(function(btn) {
     btn.addEventListener('click', function(e) {
       e.preventDefault();
       e.stopPropagation();
-      openModal(btn.getAttribute('data-id'));
+      var id = btn.getAttribute('data-id');
+      if (id && PROJECTS[id]) {
+        openModal(id);
+      } else {
+        var href = btn.getAttribute('data-href') || (btn.closest('.project-card') && btn.closest('.project-card').getAttribute('data-href'));
+        if (href) window.open(href, '_blank', 'noopener');
+      }
     });
   });
-  document.querySelectorAll('.project-card[data-id]').forEach(function(card) {
+  document.querySelectorAll('.project-card[data-id], .project-card[data-href]').forEach(function(card) {
     card.style.cursor = 'pointer';
     card.addEventListener('click', function(e) {
-      // If click came from the live-link button inside the card, don't open modal
+      // If click came from the button inside the card, its own handler already fired
       if (e.target.closest('.pcard-btn')) return;
-      openModal(card.getAttribute('data-id'));
+      var id = card.getAttribute('data-id');
+      if (id && PROJECTS[id]) {
+        openModal(id);
+      } else {
+        var href = card.getAttribute('data-href');
+        if (href) window.open(href, '_blank', 'noopener');
+      }
     });
   });
 
